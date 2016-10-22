@@ -1,0 +1,22 @@
+/* styles */
+/* called by your view template */
+
+/* You might want to try something fancier: */
+/* less: http://lesscss.org/ */
+
+* {
+  box-sizing: border-box;
+  margin:0;
+  padding:0;
+}
+
+body {
+  font-family: helvetica, arial, sans-serif;
+}
+
+#nutriFoodList li{
+	padding: 0.2em 0;
+	margin: 0.1em 0;
+	border: 1px solid tomato;
+	cursor: pointer;
+}
