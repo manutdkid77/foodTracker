@@ -11,11 +11,12 @@ var handler={
 	find:function(){
 		var foodType=document.getElementById("foodType");
 		items.showMealBtns.push(foodType.value);
-		foodType.value="";
 
 		var searchField=document.getElementById("search");
 		connection.searchPara=encodeURIComponent(searchField.value);
 		connection.nutritionix(foodType.value);
+
+		foodType.value="";
 	},
 
 };
@@ -25,8 +26,12 @@ var handler={
 var display={
 	showNutriFood:function(){
 		var list=document.getElementById('nutriFoodList');
-		list.innerHTML='';
 
+		//Clear list and meal Btns
+		list.innerHTML='';
+		document.getElementById('mealBtnContainer').style.display='none';
+
+		//Populate List
 		items.nutriFood.forEach(function(obj,index){
 			var listItem=document.createElement('li');
 			listItem.textContent='Name: '+obj.brand_name+' Calories: '+obj.nf_calories+' Fat: '+obj.nf_total_fat+' Total:'+obj.count;
@@ -38,19 +43,35 @@ var display={
 		});
 
 	},
-	
+
 	showMealOptions:function(){
-		
+		//Clear list
+		var list=document.getElementById('nutriFoodList');
+		list.innerHTML='';
+
+		//Populate Btns
+		var mealBtnDiv=document.getElementById('mealBtnContainer');
+		mealBtnDiv.style.display='initial';
+		mealBtnDiv.innerHTML='';
+
+		items.showMealBtns.forEach(function(val){
+			var newBtn=document.createElement('button');
+			newBtn.textContent=val;
+			mealBtnDiv.appendChild(newBtn);
+		});
 	},
 
-	showMealFood:function(){
+	showMealFood:function(type){
 		var list=document.getElementById('nutriFoodList');
 		list.innerHTML='';
 		items.mealFood.forEach(function(obj){
-			var listItem=document.createElement('li');
-			listItem.textContent=' Name: '+obj.brand_name+' Calories: '+obj.nf_calories+' Fat: '+obj.nf_total_fat+' Total:'+obj.count;
 
-			list.appendChild(listItem);
+			//Check button type with meal Type
+			if(obj.foodType===type){			
+				var listItem=document.createElement('li');
+				listItem.textContent=' Name: '+obj.brand_name+' Calories: '+obj.nf_calories+' Fat: '+obj.nf_total_fat+' Total:'+obj.count;
+				list.appendChild(listItem);
+			}
 		});
 	}
 }
@@ -92,7 +113,7 @@ var connection={
 };
 
 
-//IIFE for detecting select events
+//IIFE for detecting Selection List events
 (function(){
 	var list=document.getElementById('nutriFoodList');
 	list.addEventListener('click',function(event){
@@ -133,4 +154,18 @@ var connection={
 			findBtn.disabled=true;
 	});
 
+})();//End of IIFE
+
+
+//IIFE for detecting Meal Button Events
+(function(){
+	var mealBtnDiv=document.getElementById('mealBtnContainer');
+	mealBtnDiv.addEventListener('click',function(event){
+
+		//Show food items for selected Meal Type
+		if(event.target.tagName='BUTTON'){
+			display.showMealFood(event.target.textContent);
+		}
+
+	});//End event listener
 })();//End of IIFE
