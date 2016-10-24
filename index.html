@@ -8,11 +8,12 @@
 <body>
 
 	<input type="text" name="search" id="search">
+	<input type="text" name="foodType" id="foodType">
 
-	<input type="button" onclick="handler.find()" value="find">
+	<input type="button" onclick="handler.find()" value="find" disabled>
 
 	<button onclick="display.showNutriFood()">Selection List</button>
-	<button onclick="display.showMealFood()">Meal Items</button>
+	<button onclick="display.showMealOptions()">Meal Items</button>
 
 	<ul id="nutriFoodList">
 		

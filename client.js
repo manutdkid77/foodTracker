@@ -1,16 +1,21 @@
 //Object holding food items at various stages
 var items={
 	nutriFood:[],
-	mealFood:[]
+	mealFood:[],
+	showMealBtns:[]
 };
 
 
 //Object for searching food items
 var handler={
 	find:function(){
+		var foodType=document.getElementById("foodType");
+		items.showMealBtns.push(foodType.value);
+		foodType.value="";
+
 		var searchField=document.getElementById("search");
 		connection.searchPara=encodeURIComponent(searchField.value);
-		connection.nutritionix();
+		connection.nutritionix(foodType.value);
 	},
 
 };
@@ -33,6 +38,11 @@ var display={
 		});
 
 	},
+	
+	showMealOptions:function(){
+		
+	},
+
 	showMealFood:function(){
 		var list=document.getElementById('nutriFoodList');
 		list.innerHTML='';
@@ -55,7 +65,8 @@ var connection={
 		appKey:'327ef7cf036f1136b3aeea53dc207ffe'
 	},
 	url:'https://api.nutritionix.com/v1_1/search/',
-	nutritionix:function(){
+
+	nutritionix:function(foodType){
 		$.ajax({
 			url:this.url+this.searchPara,
 			type:'get',
@@ -69,6 +80,7 @@ var connection={
 						brand_name: val.fields.brand_name,
 						nf_calories: val.fields.nf_calories,
 						nf_total_fat: val.fields.nf_total_fat,
+						foodType:foodType,
 						count:1
 					});
 				}); //End foreach
@@ -80,6 +92,7 @@ var connection={
 };
 
 
+//IIFE for detecting select events
 (function(){
 	var list=document.getElementById('nutriFoodList');
 	list.addEventListener('click',function(event){
@@ -107,3 +120,17 @@ var connection={
 	});//End of event listener
 
 })(); //End of iife
+
+
+//IIFE for activating find button
+(function(){
+	var foodType=document.getElementById("foodType");
+	foodType.addEventListener('keyup',function(){
+		var findBtn=document.querySelector("input[type='button']");
+		if(this.value!=="")
+			findBtn.disabled=false;
+		else
+			findBtn.disabled=true;
+	});
+
+})();//End of IIFE
