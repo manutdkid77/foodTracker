@@ -2,7 +2,9 @@
 var items={
 	nutriFood:[],
 	mealFood:[],
-	showMealBtns:[]
+	showMealBtns:[],
+	mealLabel:[],
+	mealLabelIndex:0
 };
 
 
@@ -12,9 +14,12 @@ var handler={
 		var foodType=document.getElementById("foodType");
 		items.showMealBtns.push(foodType.value);
 
+		items.mealLabel.push({name:foodType.value});
+		items.mealLabelIndex++;
+
 		var searchField=document.getElementById("search");
 		connection.searchPara=encodeURIComponent(searchField.value);
-		connection.nutritionix(foodType.value);
+		connection.nutritionix(foodType.value,items.mealLabelIndex);
 
 		foodType.value="";
 	},
@@ -87,7 +92,8 @@ var connection={
 	},
 	url:'https://api.nutritionix.com/v1_1/search/',
 
-	nutritionix:function(foodType){
+
+	nutritionix:function(foodType,mealLabelIndex){
 		$.ajax({
 			url:this.url+this.searchPara,
 			type:'get',
@@ -102,7 +108,8 @@ var connection={
 						nf_calories: val.fields.nf_calories,
 						nf_total_fat: val.fields.nf_total_fat,
 						foodType:foodType,
-						count:1
+						count:1,
+						mealLabelIndex:mealLabelIndex
 					});
 				}); //End foreach
 
