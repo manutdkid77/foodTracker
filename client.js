@@ -2,8 +2,7 @@
 var items={
 	nutriFood:[],
 	mealFood:[],
-	showMealBtns:[],
-	mealLabel:[],
+	mealLabel:[], 	//Holds objects containing calorie total per mealtype
 	mealLabelIndex:0
 };
 
@@ -12,16 +11,19 @@ var items={
 var handler={
 	find:function(){
 		var foodType=document.getElementById("foodType");
-		items.showMealBtns.push(foodType.value);
 
-		items.mealLabel.push({name:foodType.value});
-		items.mealLabelIndex++;
+		items.mealLabel.push({
+				name:foodType.value,
+				calories:0
+		});
+		
 
 		var searchField=document.getElementById("search");
 		connection.searchPara=encodeURIComponent(searchField.value);
 		connection.nutritionix(foodType.value,items.mealLabelIndex);
 
 		foodType.value="";
+		items.mealLabelIndex++;	//Ready for next mealType
 	},
 
 };
@@ -59,9 +61,9 @@ var display={
 		mealBtnDiv.style.display='initial';
 		mealBtnDiv.innerHTML='';
 
-		items.showMealBtns.forEach(function(val){
+		items.mealLabel.forEach(function(val){
 			var newBtn=document.createElement('button');
-			newBtn.textContent=val;
+			newBtn.textContent=val.name;
 			mealBtnDiv.appendChild(newBtn);
 		});
 	},
@@ -141,6 +143,13 @@ var connection={
 			//Otherwise just push it in array
 			if(!itemExists)
 				items.mealFood.push(items.nutriFood[listItem.id]);
+
+			
+			//Incr cals for mealType of selected item
+			var index=items.nutriFood[listItem.id].mealLabelIndex;
+			console.log(index);
+			items.mealLabel[index].calories+=items.nutriFood[listItem.id].nf_calories;
+
 
 			display.showNutriFood();
 		}
