@@ -140,7 +140,25 @@ var display={
 			//Draw chart on every selection
 			new Chart(ctx, {
 			    type: 'line',
-			    data: chartData
+			    data: chartData,
+			    options:{
+		        responsive:true,
+		        scaleShowVerticalLines: false,
+		        scaleShowHorizontalLines: false,
+		        scales: {
+		            xAxes:[{
+		                gridLines: { display: false, color:'rgba(255,255,255,0.57)' }
+		            }],
+		            yAxes: [{
+		                display: true,
+		                ticks: {
+		                    suggestedMin: 0,
+		                    beginAtZero: true
+		                },
+		                gridLines:{ display: true , color:'rgba(255,255,255,0.2)'}
+		            }]
+		        }
+		    }
 			});
 	}	//End draw chart
 }
@@ -254,8 +272,7 @@ var connection={
 
 var ctx=document.getElementById('mealChart').getContext('2d');
 
-
-
-
-
-//var myLineChart = 
+Chart.defaults.global.defaultFontColor = '#ecf0f1';
+Chart.defaults.global.defaultFontSize =14;
+Chart.defaults.global.maintainAspectRatio = false;
+Chart.defaults.global.elements.line.borderWidth=4.5;
